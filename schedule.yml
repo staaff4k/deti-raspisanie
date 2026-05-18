@@ -1,0 +1,33 @@
+name: Детское расписание
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Определить день и отправить сообщение
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: |
+          DAY=$(date +%u)
+          
+          case "$DAY" in
+            1) DAY_NAME="понедельник"; LESSON="🎵 Музыка" ;;
+            2) DAY_NAME="вторник"; LESSON="🏃‍♂️ Физкультура" ;;
+            3) DAY_NAME="среда"; LESSON="❌ Ничего" ;;
+            4) DAY_NAME="четверг"; LESSON="🎵 Музыка" ;;
+            5) DAY_NAME="пятница"; LESSON="🏃‍♂️ Физкультура" ;;
+            6) DAY_NAME="суббота"; LESSON="❌ Ничего" ;;
+            7) DAY_NAME="воскресенье"; LESSON="❌ Ничего" ;;
+          esac
+          
+          MESSAGE="📅 *Сегодня ${DAY_NAME}*%0A📚 Занятие: ${LESSON}"
+          
+          curl -X POST "https://tele-bridge-cyan.vercel.app/bot${TELEGRAM_TOKEN}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{\"chat_id\":\"${CHAT_ID}\",\"text\":\"${MESSAGE}\",\"parse_mode\":\"Markdown\"}"
