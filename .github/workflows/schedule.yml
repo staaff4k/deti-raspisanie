@@ -26,7 +26,7 @@ jobs:
             7) DAY_NAME="воскресенье"; LESSON="❌ Ничего" ;;
           esac
           
-          MESSAGE="📅 *Сегодня ${DAY_NAME}*%0A📚 Занятие: ${LESSON}"
+          MESSAGE="📅 *Сегодня ${DAY_NAME}*\n📚 Занятие: ${LESSON}"
           
           curl -X POST "https://tele-bridge-cyan.vercel.app/bot${TELEGRAM_TOKEN}/sendMessage" \
             -H "Content-Type: application/json" \
