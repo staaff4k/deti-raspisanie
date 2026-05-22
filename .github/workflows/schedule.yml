@@ -2,7 +2,7 @@ name: Детское расписание
 
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '0 4 * * *'  # 7:00 по Москве (4:00 UTC)
   workflow_dispatch:
 
 jobs:
@@ -14,6 +14,7 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
+          export TZ='Europe/Moscow'
           DAY=$(date +%u)
           
           case "$DAY" in
